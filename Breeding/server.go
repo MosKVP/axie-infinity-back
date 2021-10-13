@@ -1,7 +1,7 @@
 package main
 
 import (
-	"breeding/internal/api"
+	"breeding/internal/api/calculate"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +13,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.POST("/calculate", api.Calculate)
+	r.POST("/calculate", calculate.Calculate)
 	r.Run() // listen and serve on localhost:8080
 }

@@ -2,13 +2,19 @@ module breeding
 
 go 1.17
 
-require github.com/gin-gonic/gin v1.7.4
+require (
+	github.com/gin-gonic/gin v1.7.4
+	github.com/go-playground/validator/v10 v10.9.0
+	github.com/schwarmco/go-cartesian-product v0.0.0-20180515110546-d5ee747a6dc9
+	github.com/shanemaglangit/agp v1.1.2
+	github.com/sirupsen/logrus v1.8.1
+)
 
 require (
+	github.com/ethereum/go-ethereum v1.10.8 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
