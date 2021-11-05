@@ -25,7 +25,7 @@ var MapSpecialPartID = map[string]string{
 	"ears-pointy-nyan":         "ears-nyan",
 	"back-hasagi":              "back-ronin",
 	"horn-winter-branch":       "horn-little-branch",
-	"tail-cottontail":          "tail-sakura-cottontail",
+	"tail-sakura-cottontail":   "tail-cottontail",
 	"mouth-skull-cracker":      "mouth-nut-cracker",
 	"mouth-feasting-mosquito":  "mouth-mosquito",
 	"horn-laggingggggg":        "horn-lagging",
