@@ -10,15 +10,15 @@ func (pq PriorityQueue) Less(i, j int) bool {
 		return pq[i].Chance > pq[j].Chance
 	}
 	if pq[i].Mouth != pq[j].Mouth {
-		return pq[i].Mouth < pq[j].Mouth
+		return pq[i].Mouth.PartID < pq[j].Mouth.PartID
 	}
 	if pq[i].Horn != pq[j].Horn {
-		return pq[i].Horn < pq[j].Horn
+		return pq[i].Horn.PartID < pq[j].Horn.PartID
 	}
 	if pq[i].Back != pq[j].Back {
-		return pq[i].Back < pq[j].Back
+		return pq[i].Back.PartID < pq[j].Back.PartID
 	}
-	return pq[i].Tail < pq[j].Tail
+	return pq[i].Tail.PartID < pq[j].Tail.PartID
 }
 
 func (pq PriorityQueue) Swap(i, j int) {

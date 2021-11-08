@@ -10,11 +10,14 @@ type CalculateRequest struct {
 	AxieParentID2 string `json:"axieParentID2" binding:"required,numeric"`
 }
 type CalculateResponse struct {
-	AxieParent1CurrentPrice *float64    `json:"axieParent1CurrentPrice"`
-	AxieParent1SalePrice    *float64    `json:"axieParent1SalePrice"`
-	AxieParent2CurrentPrice *float64    `json:"axieParent2CurrentPrice"`
-	AxieParent2SalePrice    *float64    `json:"axieParent2SalePrice"`
-	AxieChildren            []AxieChild `json:"axieChildren"`
+	AxieParent1  AxieParentDetail `json:"axieParent1"`
+	AxieParent2  AxieParentDetail `json:"axieParent2"`
+	AxieChildren []AxieChild      `json:"axieChildren"`
+}
+type AxieParentDetail struct {
+	BreedCount   int      `json:"breedCount"`
+	CurrentPrice *float64 `json:"currentPrice"`
+	SalePrice    *float64 `json:"salePrice"`
 }
 
 type AxieDetailVariables struct {
@@ -54,11 +57,18 @@ type AxieBriefListData struct {
 }
 
 type AxieChild struct {
-	Chance float64  `json:"chance"`
-	Price  *float64 `json:"price"`
-	Class  string   `json:"class"`
-	Mouth  string   `json:"mouth"`
-	Horn   string   `json:"horn"`
-	Back   string   `json:"back"`
-	Tail   string   `json:"tail"`
+	Chance float64     `json:"chance"`
+	Price  *float64    `json:"price"`
+	Class  model.Class `json:"class"`
+	Mouth  AxiePart    `json:"mouth"`
+	Horn   AxiePart    `json:"horn"`
+	Back   AxiePart    `json:"back"`
+	Tail   AxiePart    `json:"tail"`
+}
+
+type AxiePart struct {
+	PartID string      `json:"partID"`
+	Class  model.Class `json:"class"`
+	Name   string      `json:"name"`
+	Chance float64     `json:"chance"`
 }

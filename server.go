@@ -13,6 +13,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.POST("/api/breeding/calculate", calculate.Calculate)
+	r.POST("/api/v1/breeding/calculate", calculate.Calculate)
 	r.Run() // listen and serve on localhost:8080
 }

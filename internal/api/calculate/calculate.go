@@ -10,6 +10,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -89,10 +90,16 @@ func Calculate(c *gin.Context) {
 		return
 	}
 
-	res.AxieParent1CurrentPrice = util.ConvertETH(axieParent1.Auction.CurrentPrice)
-	res.AxieParent2CurrentPrice = util.ConvertETH(axieParent2.Auction.CurrentPrice)
-	res.AxieParent1SalePrice = p1Sale
-	res.AxieParent2SalePrice = p2Sale
+	res.AxieParent1 = AxieParentDetail{
+		BreedCount:   axieParent1.BreedCount,
+		CurrentPrice: util.ConvertETH(axieParent1.Auction.CurrentPrice),
+		SalePrice:    p1Sale,
+	}
+	res.AxieParent2 = AxieParentDetail{
+		BreedCount:   axieParent2.BreedCount,
+		CurrentPrice: util.ConvertETH(axieParent2.Auction.CurrentPrice),
+		SalePrice:    p2Sale,
+	}
 	res.AxieChildren = filteredTopChildren
 }
 
@@ -177,21 +184,21 @@ func getTopCombinations(axieParent1Class, axieParent2Class model.Class, axiePare
 	class := combineClass(axieParent1Class, axieParent2Class)
 	// TODO: improve performance https://www.geeksforgeeks.org/k-maximum-sum-combinations-two-arrays/
 
-	cha := cartesian.Iter(getKeys(class), getKeys(mouth), getKeys(horn), getKeys(back), getKeys(tail))
+	cha := cartesian.Iter(makeClassArray(class), makeAxiePartArray(mouth), makeAxiePartArray(horn), makeAxiePartArray(back), makeAxiePartArray(tail))
 	pq := make(PriorityQueue, 0)
 	for product := range cha {
-		classID := product[0].(string)
-		mouthID := product[1].(string)
-		hornID := product[2].(string)
-		backID := product[3].(string)
-		tailID := product[4].(string)
+		classID := product[0].(model.Class)
+		mouthPart := product[1].(AxiePart)
+		hornPart := product[2].(AxiePart)
+		backPart := product[3].(AxiePart)
+		tailPart := product[4].(AxiePart)
 		axieChild := AxieChild{
-			Chance: class[classID] * mouth[mouthID] * horn[hornID] * back[backID] * tail[tailID],
+			Chance: class[classID] * mouthPart.Chance * hornPart.Chance * backPart.Chance * tailPart.Chance,
 			Class:  classID,
-			Mouth:  mouthID,
-			Horn:   hornID,
-			Back:   backID,
-			Tail:   tailID,
+			Mouth:  mouthPart,
+			Horn:   hornPart,
+			Back:   backPart,
+			Tail:   tailPart,
 		}
 		heap.Push(&pq, axieChild)
 	}
@@ -205,18 +212,30 @@ func getTopCombinations(axieParent1Class, axieParent2Class model.Class, axiePare
 	log.Logger.Infof("Top Children: %v", topChildren)
 	return topChildren
 }
-func combineClass(class1, class2 model.Class) map[string]float64 {
-	m := make(map[string]float64)
-	addMapValue(m, string(class1), 0.5)
-	addMapValue(m, string(class2), 0.5)
+func combineClass(class1, class2 model.Class) map[model.Class]float64 {
+	m := make(map[model.Class]float64)
+	m[class1] = 0.5
+	v := m[class2]
+	v = v + 0.5
+	m[class2] = v
 	return m
 }
 
-func combineGenes(genes1, genes2 agp.Genes) (mouth, horn, back, tail map[string]float64) {
-	mouth = make(map[string]float64)
-	horn = make(map[string]float64)
-	back = make(map[string]float64)
-	tail = make(map[string]float64)
+func makeClassArray(m map[model.Class]float64) []interface{} {
+	arr := make([]interface{}, len(m))
+
+	i := 0
+	for k := range m {
+		arr[i] = k
+		i++
+	}
+	return arr
+}
+func combineGenes(genes1, genes2 agp.Genes) (mouth, horn, back, tail map[AxiePart]float64) {
+	mouth = make(map[AxiePart]float64)
+	horn = make(map[AxiePart]float64)
+	back = make(map[AxiePart]float64)
+	tail = make(map[AxiePart]float64)
 	addMapPart(mouth, genes1.Mouth)
 	addMapPart(mouth, genes2.Mouth)
 	addMapPart(horn, genes1.Horn)
@@ -228,15 +247,23 @@ func combineGenes(genes1, genes2 agp.Genes) (mouth, horn, back, tail map[string]
 	return
 }
 
-func addMapPart(m map[string]float64, part agp.Part) {
+func addMapPart(m map[AxiePart]float64, part agp.Part) {
 	const (
 		D  = 0.375
 		R1 = 0.09375
 		R2 = 0.03125
 	)
-	addMapValue(m, mapSpecialPartID(part.D.PartId), D)
-	addMapValue(m, mapSpecialPartID(part.R1.PartId), R1)
-	addMapValue(m, mapSpecialPartID(part.R2.PartId), R2)
+	addMapValue(m, makeAxiePart(part.D), D)
+	addMapValue(m, makeAxiePart(part.R1), R1)
+	addMapValue(m, makeAxiePart(part.R2), R2)
+}
+
+func makeAxiePart(partGene agp.PartGene) AxiePart {
+	return AxiePart{
+		PartID: mapSpecialPartID(partGene.PartId),
+		Class:  model.Class(strings.Title(string(partGene.Class))),
+		Name:   partGene.Name,
+	}
 }
 
 func mapSpecialPartID(partID string) string {
@@ -246,21 +273,22 @@ func mapSpecialPartID(partID string) string {
 	return partID
 }
 
-func addMapValue(m map[string]float64, key string, value float64) {
+func addMapValue(m map[AxiePart]float64, key AxiePart, value float64) {
 	v := m[key]
 	v = v + value
 	m[key] = v
 }
 
-func getKeys(m map[string]float64) []interface{} {
-	keys := make([]interface{}, len(m))
+func makeAxiePartArray(m map[AxiePart]float64) []interface{} {
+	arr := make([]interface{}, len(m))
 
 	i := 0
-	for k := range m {
-		keys[i] = k
+	for k, v := range m {
+		k.Chance = v
+		arr[i] = k
 		i++
 	}
-	return keys
+	return arr
 }
 
 func getAxiePrices(c context.Context, repo repository.RepositoryService, axieParent1Class, axieParent2Class model.Class,
@@ -317,10 +345,10 @@ func makeAxieParentCriteria(axieGenes agp.Genes, axieClass model.Class) axiebrie
 func makeAxieChildCriteria(axieChild AxieChild) axiebrieflist.Criteria {
 	criteria := axiebrieflist.Criteria{
 		Parts: []string{
-			axieChild.Mouth,
-			axieChild.Horn,
-			axieChild.Back,
-			axieChild.Tail,
+			axieChild.Mouth.PartID,
+			axieChild.Horn.PartID,
+			axieChild.Back.PartID,
+			axieChild.Tail.PartID,
 		},
 		BreedCount: []int{0, 0},
 	}
