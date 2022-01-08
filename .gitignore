@@ -4,6 +4,7 @@
 
 ### Go ###
 # Binaries for programs and plugins
+.env
 *.exe
 *.exe~
 *.dll
@@ -22,5 +23,6 @@
 ### Go Patch ###
 # /vendor/
 /Godeps/
+/.vscode
 
 # End of https://www.toptal.com/developers/gitignore/api/go

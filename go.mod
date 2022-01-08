@@ -3,8 +3,10 @@ module breeding
 go 1.17
 
 require (
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/validator/v10 v10.9.0
+	github.com/joho/godotenv v1.4.0
 	github.com/schwarmco/go-cartesian-product v0.0.0-20180515110546-d5ee747a6dc9
 	github.com/shanemaglangit/agp v1.1.2
 	github.com/sirupsen/logrus v1.8.1
