@@ -1,8 +1,8 @@
 package util
 
 import (
-	"breeding/internal/log"
-	"breeding/internal/model"
+	"axie-infinity-back/internal/log"
+	"axie-infinity-back/internal/model"
 	"fmt"
 	"net/http"
 	"runtime/debug"

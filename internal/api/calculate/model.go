@@ -1,8 +1,8 @@
 package calculate
 
 import (
-	"breeding/internal/model"
-	"breeding/internal/model/axiebrieflist"
+	"axie-infinity-back/internal/model"
+	"axie-infinity-back/internal/model/axiebrieflist"
 )
 
 type CalculateRequest struct {

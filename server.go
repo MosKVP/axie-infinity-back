@@ -1,7 +1,7 @@
 package main
 
 import (
-	"breeding/internal/api/calculate"
+	"axie-infinity-back/internal/api/calculate"
 	"log"
 	"net/http"
 	"os"

@@ -1,11 +1,11 @@
 package calculate
 
 import (
-	"breeding/internal/log"
-	"breeding/internal/model"
-	"breeding/internal/model/axiebrieflist"
-	"breeding/internal/repository"
-	"breeding/internal/util"
+	"axie-infinity-back/internal/log"
+	"axie-infinity-back/internal/model"
+	"axie-infinity-back/internal/model/axiebrieflist"
+	"axie-infinity-back/internal/repository"
+	"axie-infinity-back/internal/util"
 	"container/heap"
 	"context"
 	"fmt"

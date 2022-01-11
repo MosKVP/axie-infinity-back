@@ -1,4 +1,4 @@
-module breeding
+module axie-infinity-back
 
 go 1.17
 

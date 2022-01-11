@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"breeding/internal/client"
-	"breeding/internal/model"
+	"axie-infinity-back/internal/client"
+	"axie-infinity-back/internal/model"
 	"context"
 	"net/http"
 )

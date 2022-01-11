@@ -1,7 +1,7 @@
 package util
 
 import (
-	"breeding/internal/model"
+	"axie-infinity-back/internal/model"
 	"fmt"
 	"net/http"
 	"strings"

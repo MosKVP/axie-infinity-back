@@ -1,7 +1,7 @@
 package client
 
 import (
-	"breeding/internal/log"
+	"axie-infinity-back/internal/log"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"

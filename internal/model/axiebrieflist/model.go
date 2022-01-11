@@ -1,6 +1,6 @@
 package axiebrieflist
 
-import "breeding/internal/model"
+import "axie-infinity-back/internal/model"
 
 type Response struct {
 	Data Data `json:"data,omitempty"`
