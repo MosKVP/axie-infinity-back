@@ -13,7 +13,17 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	state := os.Getenv("STATE")
+
+	var envFilename string
+	switch state {
+	case "PROD":
+		envFilename = "prod.env"
+		gin.SetMode(gin.ReleaseMode)
+	default:
+		envFilename = "local.env"
+	}
+	err := godotenv.Load(envFilename)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -37,5 +47,6 @@ func main() {
 	})
 	r.POST("/api/v1/breeding/calculate", calculate.Calculate)
 
+	log.Println("Server Started")
 	r.Run() // listen and serve on localhost:8080
 }
