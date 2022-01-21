@@ -48,7 +48,7 @@ func Calculate(c *gin.Context) {
 	if err != nil {
 		intErr = &model.Error{
 			HTTPCode:        http.StatusInternalServerError,
-			Message:         "Could not getParentsDetail",
+			Message:         "Could not get parents detail",
 			InternalMessage: err.Error(),
 		}
 		return
@@ -84,7 +84,7 @@ func Calculate(c *gin.Context) {
 	if err != nil {
 		intErr = &model.Error{
 			HTTPCode:        http.StatusInternalServerError,
-			Message:         "Could not getAxiePrices",
+			Message:         "Could not get axies price",
 			InternalMessage: err.Error(),
 		}
 		return
@@ -122,14 +122,14 @@ func checkBreedingCondition(axieParent1 model.Axie, axieParent2 model.Axie) (int
 	// Check Parent exists
 	if axieParent1.IsEmpty() {
 		intErr = &model.Error{
-			Message: "Axie 1 Not Found",
+			Message: "Parent 1 Not Found",
 		}
 		return
 	}
 
 	if axieParent2.IsEmpty() {
 		intErr = &model.Error{
-			Message: "Axie 2 Not Found",
+			Message: "Parent 2 Not Found",
 		}
 		return
 	}
@@ -151,13 +151,13 @@ func checkBreedingCondition(axieParent1 model.Axie, axieParent2 model.Axie) (int
 	// Check Axie Stage
 	if axieParent1.Stage != 4 {
 		intErr = &model.Error{
-			Message: "Axie 1 is not an adult",
+			Message: "Parent 1 is not an adult",
 		}
 		return
 	}
 	if axieParent2.Stage != 4 {
 		intErr = &model.Error{
-			Message: "Axie 2 is not an adult",
+			Message: "Parent 2 is not an adult",
 		}
 		return
 	}
