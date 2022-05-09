@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	AxieGraphQL string = "https://axieinfinity.com/graphql-server-v2/graphql"
+	AxieGraphQL string = "https://graphql-gateway.axieinfinity.com/graphql"
 )
 
 type Repository struct {
